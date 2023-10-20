@@ -12,5 +12,4 @@
 # Note
 This code will not work without the `credentials.py` file that is not published in this repository.
 
-Instagram limits the number of requests that can be made to the API this API is using. Because of this, some requests could result in an error stating that the credentials are incorrect. The credentials are correct, but the requests are being blocked. Wait another 15 minutes or so and try again.
-
+Instagram limits the number of requests that can be made to the API this API is using (around 200 requests per hour). Because of this, some requests could result in an error stating that the credentials are incorrect. The credentials are correct, but the requests are being blocked. Wait another 15 minutes or so and try again.
