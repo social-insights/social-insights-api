@@ -5,9 +5,11 @@
     >   `pip install -g firebase-tools`  
     >   `pip intall -r requirements.txt`  
 
-    Docker is also required. Download it and start it, no other setup should be needed.  
+    Docker is also required. Download and run it. The Firebase emulator should do the rest.
 
-2. Run `firebase emulators:start` to start the development server
+2. Run `./functions/venv/Scripts/activate` to enter the virtual environment
+
+3. Run `firebase emulators:start` to start the development server
 
 # Note
 This code will not work without the `credentials.py` file that is not published in this repository.

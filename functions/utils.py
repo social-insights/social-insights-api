@@ -33,12 +33,9 @@ class User:
             "private": self.private,
         }
 
-def login(client: instaloader.Instaloader):
-    client.login(credentials.username, credentials.password)
-
 def get_user_by_username(username):
     L = instaloader.Instaloader()
-    login(L)
+    L.login(credentials.username, credentials.password)
     profile = instaloader.Profile.from_username(L.context, username)
 
     u = User(profile)
@@ -46,7 +43,7 @@ def get_user_by_username(username):
 
 def get_user_by_id(id):
     L = instaloader.Instaloader()
-    login(L)
+    L.login(credentials.username, credentials.password)
     profile = instaloader.Profile.from_id(L.context, id)
 
     u = User(profile)
@@ -54,6 +51,6 @@ def get_user_by_id(id):
 
 def get_media_by_username(username):
     L = instaloader.Instaloader()
-    login(L)
+    L.login(credentials.username, credentials.password)
     profile = instaloader.Profile.from_username(L.context, username)
     return profile.get_posts()._query()
