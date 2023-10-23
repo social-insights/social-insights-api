@@ -4,6 +4,8 @@ from utils import *
 import requests
 import json
 
+from nlp_api import rate_comment, rate_post
+
 initialize_app()
 
 
@@ -42,3 +44,15 @@ def get_posts(req: https_fn.Request) -> https_fn.Response:
     username = req.args.get("username")
     posts = get_media_by_username(username)
     return https_fn.Response(posts)
+def get_rating(req: https_fn.Request) -> https_fn.Response:
+    text = req.args.get("text")
+    text_type = req.args.get("type")
+    rating = None
+    if text_type == "post":
+        rating = rate_post(text)
+    elif text_type == "comment":
+        rating = rate_comment(text)
+    else:
+        return https_fn.Response("Invalid text_type", status=400)
+
+    return https_fn.Response(rating)
