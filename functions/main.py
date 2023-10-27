@@ -4,7 +4,9 @@ from utils import *
 import requests
 import json
 
-from nlp_api import rate_comment, rate_post
+from nltk.sentiment import SentimentIntensityAnalyzer
+from PIL import Image
+from image_sentiment import predict
 
 initialize_app()
 
@@ -30,7 +32,6 @@ def get_user(req: https_fn.Request) -> https_fn.Response:
             return https_fn.Response("No username or id provided", status=400)
     return https_fn.Response(json.dumps(user))
 
-# get instagram posts by username
 @https_fn.on_request(
     cors=options.CorsOptions(
         cors_origins=[
@@ -44,15 +45,42 @@ def get_posts(req: https_fn.Request) -> https_fn.Response:
     username = req.args.get("username")
     posts = get_media_by_username(username)
     return https_fn.Response(posts)
+
+@https_fn.on_request(
+    cors=options.CorsOptions(
+        cors_origins=[
+            r"http://localhost:3000",
+        ],
+        cors_methods=["get", "post"],
+    ),
+    timeout_sec=120,
+)
 def get_rating(req: https_fn.Request) -> https_fn.Response:
     text = req.args.get("text")
-    text_type = req.args.get("type")
-    rating = None
-    if text_type == "post":
-        rating = rate_post(text)
-    elif text_type == "comment":
-        rating = rate_comment(text)
-    else:
-        return https_fn.Response("Invalid text_type", status=400)
+    # text_type = req.args.get("type")
+    
+    sia = SentimentIntensityAnalyzer()
+    rating = str(sia.polarity_scores(text)["compound"])
 
     return https_fn.Response(rating)
+
+@https_fn.on_request(
+    cors=options.CorsOptions(
+        cors_origins=[
+            r"http://localhost:3000",
+        ],
+        cors_methods=["get", "post"],
+    ),
+    timeout_sec=120,
+)
+def get_image_rating(req: https_fn.Request) -> https_fn.Response:
+    image = req.files.get("image")
+    # text_type = req.args.get("type")
+    
+    # sia = SentimentIntensityAnalyzer()
+    # rating = str(sia.polarity_scores(text)["compound"])
+    
+    image = Image.open(image)    
+    res = predict(image)
+
+    return https_fn.Response(res)
